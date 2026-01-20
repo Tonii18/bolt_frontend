@@ -1,3 +1,5 @@
+import 'package:bolt_frontend/config/theme/app_colors.dart';
+import 'package:bolt_frontend/views/auth/login_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -9,12 +11,14 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
+    return MaterialApp(
+      title: 'Bolt',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        fontFamily: 'Outfit',
+        scaffoldBackgroundColor: AppColors.background
       ),
+      home: LoginScreen(),
     );
   }
 }

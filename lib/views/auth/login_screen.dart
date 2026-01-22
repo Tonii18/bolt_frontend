@@ -90,6 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     focusedOutlinedBorder: AppColors.lightBlack,
                     isPassword: true,
                     icon: Icons.password,
+                    textEditingController: null,
                   ),
 
                   SizedBox(height: scale * 30),
@@ -99,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 55,
                     backgroundColor: AppColors.lightBlack,
                     borderColor: AppColors.lightBlack,
-                    borderRadius: 10,
+                    borderRadius: 30,
                     text: 'Iniciar sesión',
                     textColor: Colors.white,
                     fontSize: 20,

@@ -41,7 +41,7 @@ class _CustomElevatedButtonState extends State<CustomElevatedButton> {
         style: ElevatedButton.styleFrom(
           backgroundColor: widget.backgroundColor,
           side: BorderSide(color: widget.borderColor),
-          shape: RoundedRectangleBorder(
+          shape: ContinuousRectangleBorder(
             borderRadius: BorderRadius.circular(widget.borderRadius),
           ),
         ),

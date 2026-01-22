@@ -10,6 +10,7 @@ class CustomFormField extends StatefulWidget {
   final TextEditingController? textEditingController;
   final bool isPassword;
   final IconData icon;
+  final FormFieldValidator? validator;
 
   const CustomFormField({
     super.key,
@@ -21,7 +22,8 @@ class CustomFormField extends StatefulWidget {
     required this.focusedOutlinedBorder,
     this.textEditingController,
     required this.isPassword,
-    required this.icon,
+    required this.icon, 
+    this.validator,
   });
 
   @override
@@ -35,6 +37,10 @@ class _CustomFormFieldState extends State<CustomFormField> {
       width: widget.width,
       child: TextFormField(
         obscureText: widget.isPassword,
+
+        validator: widget.validator,
+
+        controller: widget.textEditingController,
 
         decoration: InputDecoration(
           prefixIcon: Icon(widget.icon),
@@ -56,8 +62,8 @@ class _CustomFormFieldState extends State<CustomFormField> {
           ),
 
           focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: widget.focusedOutlinedBorder)
-          )
+            borderSide: BorderSide(color: widget.focusedOutlinedBorder),
+          ),
         ),
       ),
     );

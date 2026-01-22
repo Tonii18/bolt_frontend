@@ -242,7 +242,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
       if (message == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Registro exitoso')),
+        SnackBar(content: Text('Registered sucessfully')),
       );
       // Navigate to Log in screen
     } else {

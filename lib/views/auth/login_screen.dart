@@ -1,5 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:bolt_frontend/config/measures/scales.dart';
 import 'package:bolt_frontend/config/theme/app_colors.dart';
+import 'package:bolt_frontend/core/secure_storage.dart';
+import 'package:bolt_frontend/services/auth_service.dart';
 import 'package:bolt_frontend/views/auth/register_screen.dart';
 import 'package:bolt_frontend/widgets/custom_elevated_button.dart';
 import 'package:bolt_frontend/widgets/custom_form_field.dart';
@@ -14,6 +18,11 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();
+
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     // Set scales
@@ -40,107 +49,156 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
 
-          SafeArea(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(
-                vertical: scale * 35,
-                horizontal: scale * 35,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(height: scale * 60),
+          Form(
+            key: _formKey,
+            child: SafeArea(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(
+                  vertical: scale * 35,
+                  horizontal: scale * 35,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(height: scale * 60),
 
-                  SvgPicture.asset(
-                    'assets/images/icon.svg',
-                    width: scale * 85,
-                    height: scale * 85,
-                  ),
-
-                  Text(
-                    'Bolt',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      fontSize: scale * 30,
-                      color: Colors.white,
+                    SvgPicture.asset(
+                      'assets/images/icon.svg',
+                      width: scale * 85,
+                      height: scale * 85,
                     ),
-                  ),
 
-                  SizedBox(height: scale * 300),
-
-                  CustomFormField(
-                    width: width,
-                    text: 'Correo electrónico',
-                    textColor: AppColors.darkGrey,
-                    background: AppColors.lightGrey,
-                    iconColor: AppColors.lightBlack,
-                    focusedOutlinedBorder: AppColors.lightBlack,
-                    isPassword: false,
-                    icon: Icons.email,
-                  ),
-
-                  SizedBox(height: scale * 10),
-
-                  CustomFormField(
-                    width: width,
-                    text: 'Contraseña',
-                    textColor: AppColors.darkGrey,
-                    background: AppColors.lightGrey,
-                    iconColor: AppColors.lightBlack,
-                    focusedOutlinedBorder: AppColors.lightBlack,
-                    isPassword: true,
-                    icon: Icons.password,
-                    textEditingController: null,
-                  ),
-
-                  SizedBox(height: scale * 30),
-
-                  CustomElevatedButton(
-                    width: width,
-                    height: 55,
-                    backgroundColor: AppColors.lightBlack,
-                    borderColor: AppColors.lightBlack,
-                    borderRadius: 30,
-                    text: 'Iniciar sesión',
-                    textColor: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w900,
-                    onPressed: () {},
-                  ),
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        '¿Aún no tienes cuenta?',
-                        style: TextStyle(
-                          fontSize: scale * 16,
-                          fontWeight: FontWeight.w100,
-                          color: AppColors.lightBlack,
-                        ),
+                    Text(
+                      'Bolt',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w900,
+                        fontSize: scale * 30,
+                        color: Colors.white,
                       ),
+                    ),
 
-                      TextButton(
-                        onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterScreen()));
-                        },
-                        child: Text(
-                          'Regístrate',
+                    SizedBox(height: scale * 300),
+
+                    CustomFormField(
+                      width: width,
+                      text: 'Correo electrónico',
+                      textColor: AppColors.darkGrey,
+                      background: AppColors.lightGrey,
+                      iconColor: AppColors.lightBlack,
+                      focusedOutlinedBorder: AppColors.lightBlack,
+                      isPassword: false,
+                      icon: Icons.email,
+                      textEditingController: emailController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Email es obligatorio';
+                        }
+                        return null;
+                      },
+                    ),
+
+                    SizedBox(height: scale * 10),
+
+                    CustomFormField(
+                      width: width,
+                      text: 'Contraseña',
+                      textColor: AppColors.darkGrey,
+                      background: AppColors.lightGrey,
+                      iconColor: AppColors.lightBlack,
+                      focusedOutlinedBorder: AppColors.lightBlack,
+                      isPassword: true,
+                      icon: Icons.password,
+                      textEditingController: passwordController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Contraseña es obligatoria';
+                        }
+                        if (value.length < 8) {
+                          return 'Longitud mínima de 8 caracteres';
+                        }
+                        return null;
+                      },
+                    ),
+
+                    SizedBox(height: scale * 30),
+
+                    CustomElevatedButton(
+                      width: width,
+                      height: 55,
+                      backgroundColor: AppColors.lightBlack,
+                      borderColor: AppColors.lightBlack,
+                      borderRadius: 30,
+                      text: 'Iniciar sesión',
+                      textColor: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900,
+                      onPressed: () {
+                        submit();
+                      },
+                    ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '¿Aún no tienes cuenta?',
                           style: TextStyle(
-                            fontWeight: FontWeight.w900,
                             fontSize: scale * 16,
+                            fontWeight: FontWeight.w100,
                             color: AppColors.lightBlack,
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RegisterScreen(),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            'Regístrate',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w900,
+                              fontSize: scale * 16,
+                              color: AppColors.lightBlack,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  void submit() async {
+    if (_formKey.currentState!.validate()) {
+      final email = emailController.text;
+      final password = passwordController.text;
+
+      final result = await AuthService.login(email, password);
+
+      if (result!.startsWith('eyJ')) {
+        await SecureStorage.saveToken(result);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Logged succesfully!')),
+        );
+
+        // Redirect to home
+      } else {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(result)));
+      }
+    }
   }
 }

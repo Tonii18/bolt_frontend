@@ -13,7 +13,7 @@ class UserRegister {
 
   Map<String, dynamic> toJson() {
     return {
-      'fullname': fullname,
+      'fullName': fullname,
       'email': email,
       'phone': phone,
       'password': password,

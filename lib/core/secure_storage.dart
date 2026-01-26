@@ -1,7 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class SecureStorage {
-
   // JWT token managment
 
   static const _storage = FlutterSecureStorage();
@@ -17,5 +17,10 @@ class SecureStorage {
 
   static Future<void> deleteToken() async {
     await _storage.delete(key: _tokenKey);
+  }
+
+  static String getRoleFromToken(String token) {
+    Map<String, dynamic> decoded = JwtDecoder.decode(token);
+    return decoded['role'];
   }
 }

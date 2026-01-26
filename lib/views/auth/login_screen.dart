@@ -1,10 +1,12 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, dead_code, avoid_print
 
 import 'package:bolt_frontend/config/measures/scales.dart';
 import 'package:bolt_frontend/config/theme/app_colors.dart';
 import 'package:bolt_frontend/core/secure_storage.dart';
 import 'package:bolt_frontend/services/auth_service.dart';
+import 'package:bolt_frontend/views/admin_role/admin_home.dart';
 import 'package:bolt_frontend/views/auth/register_screen.dart';
+import 'package:bolt_frontend/views/user_role/user_home.dart';
 import 'package:bolt_frontend/widgets/custom_elevated_button.dart';
 import 'package:bolt_frontend/widgets/custom_form_field.dart';
 import 'package:flutter/material.dart';
@@ -189,11 +191,31 @@ class _LoginScreenState extends State<LoginScreen> {
       if (result!.startsWith('eyJ')) {
         await SecureStorage.saveToken(result);
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Logged succesfully!')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Logged succesfully!')));
 
-        // Redirect to home
+        // Get information about whether the user role is USER or ADMIN
+
+        String token = await SecureStorage.getToken() as String;
+        String role = SecureStorage.getRoleFromToken(token);
+
+        print(token);
+        print(role);
+
+        if (role == 'ROLE_USER') {
+          print(role);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => UserHome()),
+          );
+        } else if (role == 'ROLE_ADMIN') {
+          print(role);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AdminHome()),
+          );
+        }
       } else {
         ScaffoldMessenger.of(
           context,

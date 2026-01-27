@@ -1,5 +1,7 @@
-import 'package:bolt_frontend/config/measures/scales.dart';
 import 'package:bolt_frontend/config/theme/app_colors.dart';
+import 'package:bolt_frontend/views/user_role/projects_screen.dart';
+import 'package:bolt_frontend/views/user_role/settings_screen.dart';
+import 'package:bolt_frontend/widgets/custom_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
 class UserHome extends StatefulWidget {
@@ -10,48 +12,28 @@ class UserHome extends StatefulWidget {
 }
 
 class _UserHomeState extends State<UserHome> {
+
+  int selectedIndex = 0;
+
+  final List<Widget> widgetsOptions = [
+    ProjectsScreen(),
+    SettingsScreen()
+  ];
+
+  void onNavTapped(int index) {
+    setState(() {
+      selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Set scales
-
-    final size = Scales.size(context);
-    final width = size.width;
-    final scale = Scales.scale(context);
-
-    // Code
-
     return Scaffold(
-      resizeToAvoidBottomInset: true,
       backgroundColor: AppColors.background,
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(
-          vertical: scale * 20,
-          horizontal: scale * 20,
-        ),
-        child: SafeArea(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-                children: [
-                  Text('Bienvenido a Bolt'),
-                  Text('Martes, 27 de Enero'),
-                ],
-              ),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-
-                children: [
-                  Text('Mis proyectos'),
-                ],
-              ),
-            ],
-          ),
-        ),
+      body: widgetsOptions[selectedIndex],
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: selectedIndex,
+        onTap: onNavTapped,
       ),
     );
   }

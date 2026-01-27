@@ -6,6 +6,7 @@ import 'package:bolt_frontend/core/secure_storage.dart';
 import 'package:bolt_frontend/services/auth_service.dart';
 import 'package:bolt_frontend/views/admin_role/admin_home.dart';
 import 'package:bolt_frontend/views/auth/register_screen.dart';
+import 'package:bolt_frontend/views/user_role/projects_screen.dart';
 import 'package:bolt_frontend/views/user_role/user_home.dart';
 import 'package:bolt_frontend/widgets/custom_elevated_button.dart';
 import 'package:bolt_frontend/widgets/custom_form_field.dart';

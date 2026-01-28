@@ -1,6 +1,7 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:bolt_frontend/config/measures/scales.dart';
 import 'package:bolt_frontend/config/theme/app_colors.dart';
-import 'package:bolt_frontend/models/user_register.dart';
 import 'package:flutter/material.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -36,23 +37,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Text(
                 'Ajustes de Administrador',
                 style: TextStyle(
-                  fontSize: scale * 20,
+                  fontSize: scale * 22,
                   color: AppColors.lightBlack,
-                  fontWeight: FontWeight.w900,
+                  fontWeight: FontWeight.w800,
                 ),
               ),
 
-              SizedBox(height: scale * 20),
-              Divider(color: AppColors.darkGrey),
-              SizedBox(height: scale * 20),
+              SizedBox(height: scale * 10),
+              Divider(color: AppColors.lightGrey),
+              SizedBox(height: scale * 10),
 
               Text(
                 'Datos personales',
                 textAlign: TextAlign.left,
                 style: TextStyle(
-                  fontSize: scale * 17,
+                  fontSize: scale * 22,
                   color: AppColors.lightBlack,
-                  fontWeight: FontWeight.w900,
+                  fontWeight: FontWeight.w800,
                 ),
               ),
 
@@ -65,8 +66,70 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   Text(
                     'Correo electrónico',
                     style: TextStyle(
-                      fontSize: scale * 12,
+                      fontSize: scale * 16,
                       color: AppColors.lightBlack,
+                      fontWeight: FontWeight.w400
+                    ),
+                  ),
+                  Text(
+                    'correo@prueba',
+                    style: TextStyle(
+                      fontSize: scale * 16,
+                      color: AppColors.darkGrey,
+                      fontWeight: FontWeight.w400
+                    ),
+                  ),
+                ],
+              ),
+
+              SizedBox(height: scale * 10),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                children: [
+                  Text(
+                    'Nombre completo',
+                    style: TextStyle(
+                      fontSize: scale * 16,
+                      color: AppColors.lightBlack,
+                      fontWeight: FontWeight.w400
+                    ),
+                  ),
+                  
+                ],
+              ),
+
+              SizedBox(height: scale * 10),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                children: [
+                  Text(
+                    'Teléfono',
+                    style: TextStyle(
+                      fontSize: scale * 16,
+                      color: AppColors.lightBlack,
+                      fontWeight: FontWeight.w400
+                    ),
+                  ),
+                  
+                ],
+              ),
+
+              SizedBox(height: scale * 10),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                children: [
+                  Text(
+                    'Rol',
+                    style: TextStyle(
+                      fontSize: scale * 16,
+                      color: AppColors.lightBlack,
+                      fontWeight: FontWeight.w400
                     ),
                   ),
                   

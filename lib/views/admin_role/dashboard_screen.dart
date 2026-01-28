@@ -1,5 +1,9 @@
+// ignore_for_file: unnecessary_new
+
 import 'package:bolt_frontend/config/measures/scales.dart';
 import 'package:bolt_frontend/config/theme/app_colors.dart';
+import 'package:bolt_frontend/views/admin_role/create_project.dart';
+import 'package:bolt_frontend/widgets/custom_floating_action_button.dart';
 import 'package:flutter/material.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -98,10 +102,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                 children: [
                   Text(
-                    'Crea un nuevo proyecto',
+                    'Comienza un nuevo proyecto',
                     style: TextStyle(
                       fontSize: scale * 20,
-                      fontWeight: FontWeight.w900,
+                      fontWeight: FontWeight.w800,
                       color: AppColors.lightBlack,
                     ),
                   ),
@@ -110,27 +114,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
               SizedBox(height: scale * 30),
 
-              FloatingActionButton.extended(
-                backgroundColor: AppColors.lightGrey,
-                onPressed: () {},
-                icon: Icon(
-                  Icons.add,
-                  size: scale * 30,
-                  color: AppColors.darkGrey,
-                ),
-                label: Text(
-                  'Nuevo Proyecto',
-                  style: TextStyle(
-                    fontSize: scale * 18,
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.darkGrey,
-                  ),
-                ),
-                extendedPadding: EdgeInsets.symmetric(
-                  horizontal: width * 0.25,
-                  vertical: scale * 15,
-                ),
-              ),
+              CustomFloatingActionButton(scale: scale, width: width, screen: CreateProject(), text: 'Empezar proyecto', icon: Icons.add),
 
               SizedBox(height: scale * 30),
 
@@ -142,7 +126,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     'Proyectos existentes',
                     style: TextStyle(
                       fontSize: scale * 20,
-                      fontWeight: FontWeight.w900,
+                      fontWeight: FontWeight.w800,
                       color: AppColors.lightBlack,
                     ),
                   ),

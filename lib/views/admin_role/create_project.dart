@@ -21,6 +21,8 @@ class _CreateProjectState extends State<CreateProject> {
     final width = size.width;
     final scale = Scales.scale(context);
 
+    List<Color> gradientColors = [AppColors.blueWater, AppColors.purple];
+
     return Scaffold(
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(
@@ -136,17 +138,30 @@ class _CreateProjectState extends State<CreateProject> {
 
               SizedBox(height: scale * 250),
 
-              CustomElevatedButton(
-                width: width, 
-                height: 60, 
-                backgroundColor: AppColors.blueWater, 
-                borderColor: Colors.transparent, 
-                borderRadius: 30, 
-                text: 'Crear proyecto', 
-                textColor: AppColors.white, 
-                fontSize: scale * 20, 
-                fontWeight: FontWeight.w800
-              )
+              SizedBox(
+                child: DecoratedBox(
+                  decoration: ShapeDecoration(
+                    gradient: LinearGradient(colors: gradientColors),
+                    shape: ContinuousRectangleBorder(
+                      borderRadius: BorderRadiusGeometry.circular(30)
+                    )
+                  ),
+                  child: CustomElevatedButton(
+                    width: width,
+                    height: 60,
+                    backgroundColor: Colors.transparent,
+                    borderColor: Colors.transparent,
+                    borderRadius: 30,
+                    text: 'Crear proyecto',
+                    textColor: AppColors.white,
+                    fontSize: scale * 20,
+                    fontWeight: FontWeight.w800,
+                    onPressed: () {
+                      
+                    },
+                  ),
+                ),
+              ),
             ],
           ),
         ),

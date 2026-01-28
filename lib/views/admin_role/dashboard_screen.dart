@@ -61,8 +61,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       backgroundColor: AppColors.background,
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(
-          horizontal: 30.0 * scale,
-          vertical: 30.0 * scale,
+          horizontal: 30 * scale,
+          vertical: 30 * scale,
         ),
         child: SafeArea(
           child: Column(

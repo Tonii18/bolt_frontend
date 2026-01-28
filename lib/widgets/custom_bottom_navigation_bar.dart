@@ -22,7 +22,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
     
     return BottomNavigationBar(
       items: [
-        BottomNavigationBarItem(icon: Icon(Icons.menu_book_rounded), label: 'Proyectos'),
+        BottomNavigationBarItem(icon: Icon(Icons.edit_document), label: 'Proyectos'),
         BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Ajustes'),
       ],
       backgroundColor: AppColors.white,

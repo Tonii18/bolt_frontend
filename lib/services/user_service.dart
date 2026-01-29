@@ -4,8 +4,7 @@ import 'package:bolt_frontend/services/token_service.dart';
 import 'package:http/http.dart' as http;
 
 class UserService {
-  static const String url =
-      'http://192.168.1.131:8081'; //"http://192.168.50.36:8081"; //"http://10.10.6.91:8081";
+  static const String url = "https://bolt-backend-c99u.onrender.com";
 
   Future<Map<String, dynamic>> getCurrentUser() async {
     final token = await TokenService.getToken();

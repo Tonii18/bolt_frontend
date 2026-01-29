@@ -7,8 +7,7 @@ import 'package:bolt_frontend/services/token_service.dart';
 import 'package:http/http.dart' as http;
 
 class AuthService {
-  static const String url =
-      'http://192.168.1.131:8081'; //http://192.168.50.36:8081"; //"http://10.0.2.2:8081";  //'http://192.168.1.134:8081'; //http://10.10.6.143:8081
+  static const String url = "https://bolt-backend-c99u.onrender.com";
 
   static Future<String?> register(UserRegister user) async {
     try {

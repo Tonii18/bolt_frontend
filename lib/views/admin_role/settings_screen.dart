@@ -2,6 +2,9 @@
 
 import 'package:bolt_frontend/config/measures/scales.dart';
 import 'package:bolt_frontend/config/theme/app_colors.dart';
+import 'package:bolt_frontend/services/auth_service.dart';
+import 'package:bolt_frontend/services/user_service.dart';
+import 'package:bolt_frontend/widgets/custom_floating_action_button.dart';
 import 'package:flutter/material.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -12,6 +15,29 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  final UserService _userService = UserService();
+  final AuthService _authService = AuthService();
+
+  Map<String, dynamic>? _userData;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    setState(() => _isLoading = true);
+
+    final userData = await _userService.getCurrentUser();
+
+    setState(() {
+      _userData = userData;
+      _isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = Scales.size(context);
@@ -68,15 +94,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     style: TextStyle(
                       fontSize: scale * 16,
                       color: AppColors.lightBlack,
-                      fontWeight: FontWeight.w400
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
                   Text(
-                    'correo@prueba',
+                    '${_userData?['email'] ?? ''}',
                     style: TextStyle(
                       fontSize: scale * 16,
                       color: AppColors.darkGrey,
-                      fontWeight: FontWeight.w400
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
                 ],
@@ -93,10 +119,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     style: TextStyle(
                       fontSize: scale * 16,
                       color: AppColors.lightBlack,
-                      fontWeight: FontWeight.w400
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
-                  
+                  Text(
+                    '${_userData?['fullName'] ?? ''}',
+                    style: TextStyle(
+                      fontSize: scale * 16,
+                      color: AppColors.darkGrey,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
                 ],
               ),
 
@@ -111,10 +144,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     style: TextStyle(
                       fontSize: scale * 16,
                       color: AppColors.lightBlack,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  Text(
+                    '${_userData?['phone'] ?? ''}',
+                    style: TextStyle(
+                      fontSize: scale * 16,
+                      color: AppColors.darkGrey,
                       fontWeight: FontWeight.w400
                     ),
                   ),
-                  
                 ],
               ),
 
@@ -129,13 +169,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     style: TextStyle(
                       fontSize: scale * 16,
                       color: AppColors.lightBlack,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  Text(
+                    '${_userData?['role'] ?? ''}',
+                    style: TextStyle(
+                      fontSize: scale * 16,
+                      color: AppColors.darkGrey,
                       fontWeight: FontWeight.w400
                     ),
                   ),
-                  
                 ],
               ),
-            ],
+
+              SizedBox(height: scale * 10),
+              Divider(color: AppColors.lightGrey),
+              SizedBox(height: scale * 10),
+
+              //TODO: Implement logout button functionality
+            ],            
           ),
         ),
       ),

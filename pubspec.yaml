@@ -1,6 +1,6 @@
 name: bolt_frontend
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
@@ -14,6 +14,7 @@ dependencies:
   http: ^1.6.0
   flutter_secure_storage: ^10.0.0
   jwt_decoder: ^2.0.1
+  shared_preferences: 2.5.3
 
 dev_dependencies:
   flutter_test:

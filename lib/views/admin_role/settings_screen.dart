@@ -1,10 +1,10 @@
-// ignore_for_file: unused_local_variable
+// ignore_for_file: unused_local_variable, unused_field
 
 import 'package:bolt_frontend/config/measures/scales.dart';
 import 'package:bolt_frontend/config/theme/app_colors.dart';
 import 'package:bolt_frontend/services/auth_service.dart';
 import 'package:bolt_frontend/services/user_service.dart';
-import 'package:bolt_frontend/widgets/custom_floating_action_button.dart';
+import 'package:bolt_frontend/views/auth/login_screen.dart';
 import 'package:flutter/material.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -187,8 +187,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Divider(color: AppColors.lightGrey),
               SizedBox(height: scale * 10),
 
-              //TODO: Implement logout button functionality
-
               Text(
                 'Acciones',
                 textAlign: TextAlign.left,
@@ -204,7 +202,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               FloatingActionButton.extended(
                 backgroundColor: AppColors.backgroundRed,
                 onPressed: () {
-                  
+                  AuthService.logout();
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
                 },
                 icon: Icon(Icons.power_settings_new_sharp, size: scale * 30, color: AppColors.red),
 

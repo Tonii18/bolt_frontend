@@ -152,7 +152,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     style: TextStyle(
                       fontSize: scale * 16,
                       color: AppColors.darkGrey,
-                      fontWeight: FontWeight.w400
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
                 ],
@@ -177,7 +177,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     style: TextStyle(
                       fontSize: scale * 16,
                       color: AppColors.darkGrey,
-                      fontWeight: FontWeight.w400
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
                 ],
@@ -188,7 +188,50 @@ class _SettingsScreenState extends State<SettingsScreen> {
               SizedBox(height: scale * 10),
 
               //TODO: Implement logout button functionality
-            ],            
+
+              Text(
+                'Acciones',
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  fontSize: scale * 22,
+                  color: AppColors.lightBlack,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+
+              SizedBox(height: scale * 20),
+
+              FloatingActionButton.extended(
+                backgroundColor: AppColors.backgroundRed,
+                onPressed: () {
+                  
+                },
+                icon: Icon(Icons.power_settings_new_sharp, size: scale * 30, color: AppColors.red),
+
+                elevation: 0,
+
+                shape: ContinuousRectangleBorder(
+                  side: BorderSide(
+                    color: AppColors.red
+                  ),
+                  borderRadius: BorderRadiusGeometry.circular(30),
+                ),
+
+                label: Text(
+                  'Cerrar sesión',
+                  style: TextStyle(
+                    fontSize: scale * 18,
+                    fontWeight: FontWeight.w400,
+                    color: AppColors.red,
+                  ),
+                ),
+
+                extendedPadding: EdgeInsets.symmetric(
+                  horizontal: width * 0.25,
+                  vertical: scale * 15,
+                ),
+              ),
+            ],
           ),
         ),
       ),

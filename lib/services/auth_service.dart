@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 
 class AuthService {
   static const String url =
-      "http://192.168.50.36:8081"; //"http://10.0.2.2:8081";  //'http://192.168.1.134:8081'; //http://10.10.6.143:8081
+      'http://172.20.10.4:8081'; //http://192.168.50.36:8081"; //"http://10.0.2.2:8081";  //'http://192.168.1.134:8081'; //http://10.10.6.143:8081
 
   static Future<String?> register(UserRegister user) async {
     try {
@@ -57,5 +57,4 @@ class AuthService {
       return '$e Cannot connect to the server';
     }
   }
-
 }

@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 class UserService {
   static const String url =
-      "http://192.168.50.36:8081"; //"http://10.10.6.91:8081";
+      'http://172.20.10.4:8081'; //"http://192.168.50.36:8081"; //"http://10.10.6.91:8081";
 
   Future<Map<String, dynamic>> getCurrentUser() async {
     final token = await TokenService.getToken();

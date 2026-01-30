@@ -2,6 +2,7 @@
 
 import 'package:bolt_frontend/config/measures/scales.dart';
 import 'package:bolt_frontend/config/theme/app_colors.dart';
+import 'package:bolt_frontend/views/admin_role/list_user_project.dart';
 import 'package:bolt_frontend/widgets/custom_elevated_button.dart';
 import 'package:bolt_frontend/widgets/custom_floating_action_button.dart';
 import 'package:bolt_frontend/widgets/custom_form_field.dart';
@@ -131,7 +132,7 @@ class _CreateProjectState extends State<CreateProject> {
               CustomFloatingActionButton(
                 scale: scale,
                 width: width,
-                screen: null,
+                screen: ListUserProject(),
                 text: 'Añadir participantes',
                 icon: Icons.add,
               ),

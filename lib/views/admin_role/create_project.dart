@@ -1,7 +1,9 @@
-// ignore_for_file: unused_local_variable
+// ignore_for_file: unused_local_variable, use_build_context_synchronously
 
 import 'package:bolt_frontend/config/measures/scales.dart';
 import 'package:bolt_frontend/config/theme/app_colors.dart';
+import 'package:bolt_frontend/models/project.dart';
+import 'package:bolt_frontend/services/user_service.dart';
 import 'package:bolt_frontend/views/admin_role/list_user_project.dart';
 import 'package:bolt_frontend/widgets/custom_elevated_button.dart';
 import 'package:bolt_frontend/widgets/custom_floating_action_button.dart';
@@ -16,6 +18,9 @@ class CreateProject extends StatefulWidget {
 }
 
 class _CreateProjectState extends State<CreateProject> {
+  TextEditingController nameController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final size = Scales.size(context);
@@ -89,6 +94,7 @@ class _CreateProjectState extends State<CreateProject> {
                 focusedOutlinedBorder: Colors.transparent,
                 isPassword: false,
                 icon: Icons.edit,
+                textEditingController: nameController,
               ),
 
               SizedBox(height: scale * 10),
@@ -102,6 +108,7 @@ class _CreateProjectState extends State<CreateProject> {
                 focusedOutlinedBorder: Colors.transparent,
                 isPassword: false,
                 icon: Icons.description,
+                textEditingController: descriptionController,
               ),
 
               SizedBox(height: scale * 15),
@@ -144,8 +151,8 @@ class _CreateProjectState extends State<CreateProject> {
                   decoration: ShapeDecoration(
                     gradient: LinearGradient(colors: gradientColors),
                     shape: ContinuousRectangleBorder(
-                      borderRadius: BorderRadiusGeometry.circular(30)
-                    )
+                      borderRadius: BorderRadiusGeometry.circular(30),
+                    ),
                   ),
                   child: CustomElevatedButton(
                     width: width,
@@ -158,7 +165,7 @@ class _CreateProjectState extends State<CreateProject> {
                     fontSize: scale * 20,
                     fontWeight: FontWeight.w800,
                     onPressed: () {
-                      
+                      submit();
                     },
                   ),
                 ),
@@ -168,5 +175,29 @@ class _CreateProjectState extends State<CreateProject> {
         ),
       ),
     );
+  }
+
+  void submit() async {
+    String name = nameController.text;
+    String description = descriptionController.text;
+    DateTime creationDate = DateTime.now();
+
+    Project newProject = Project(
+      name: name,
+      description: description,
+      creationDate: creationDate,
+    );
+
+    bool response = await UserService.createProject(newProject);
+
+    if (response) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Proyecto creado correctamente')));
+    }else{
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('No se pudo crear el proyecto')));
+    }
   }
 }

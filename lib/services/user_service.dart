@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:bolt_frontend/models/project.dart';
 import 'package:bolt_frontend/services/token_service.dart';
+import 'package:bolt_frontend/views/admin_role/create_project.dart';
 import 'package:http/http.dart' as http;
 
 class UserService {
@@ -55,4 +57,26 @@ class UserService {
     }
   }
 
+  static Future<bool> createProject(Project project) async {
+    final token = await TokenService.getToken();
+
+    if (token == null) {
+      throw Exception('No token found');
+    }
+
+    final response = await http.post(
+      Uri.parse('$url/projects/createdProject'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      body: json.encode(project.toJson()),
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw Exception('Failed to create project');
+    }
+  }
 }

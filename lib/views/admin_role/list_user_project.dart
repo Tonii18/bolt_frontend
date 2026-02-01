@@ -53,7 +53,7 @@ class _ListUserProjectState extends State<ListUserProject> {
                     icon: Icon(Icons.arrow_back, color: AppColors.lightBlack),
                   ),
                   Text(
-                    'Añade participantes al proyecto',
+                    'Añade participantes',
                     style: TextStyle(
                       color: AppColors.lightBlack,
                       fontSize: scale * 20,

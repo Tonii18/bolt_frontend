@@ -73,9 +73,10 @@ class UserService {
       body: json.encode(project.toJson()),
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       return true;
     } else {
+      print(response.statusCode);
       throw Exception('Failed to create project');
     }
   }

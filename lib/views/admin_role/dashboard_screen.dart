@@ -2,6 +2,7 @@
 
 import 'package:bolt_frontend/config/measures/scales.dart';
 import 'package:bolt_frontend/config/theme/app_colors.dart';
+import 'package:bolt_frontend/services/project_service.dart';
 import 'package:bolt_frontend/views/admin_role/create_project.dart';
 import 'package:bolt_frontend/widgets/custom_floating_action_button.dart';
 import 'package:bolt_frontend/widgets/custom_listview_builder.dart';
@@ -15,6 +16,14 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  late Future<List<dynamic>> _projects;
+
+  @override
+  void initState() {
+    super.initState();
+    _projects = ProjectService.getAllProjects();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = Scales.size(context);
@@ -115,7 +124,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
               SizedBox(height: scale * 30),
 
-              CustomFloatingActionButton(scale: scale, width: width, screen: CreateProject(), text: 'Empezar proyecto', icon: Icons.add),
+              CustomFloatingActionButton(
+                scale: scale,
+                width: width,
+                screen: CreateProject(),
+                text: 'Empezar proyecto',
+                icon: Icons.add,
+              ),
 
               SizedBox(height: scale * 30),
 
@@ -134,14 +149,153 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ],
               ),
 
-              // Projects list view
+              SizedBox(height: scale * 30),
 
-              // FutureBuilder<List<dynamic>> (
-              //   future: ,
-              //   builder: (context, snapshot) {
-              //     return CustomListviewBuilder();
-              //   }
-              // ),
+              // Projects list view
+              FutureBuilder<List<dynamic>>(
+                future: _projects,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return Text('No projects found');
+                  } else {
+                    final projectList = snapshot.data!;
+                    if (projectList.isEmpty) {
+                      return Text('No projects available');
+                    }
+
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: projectList.length,
+                      itemBuilder: (context, index) {
+                        final project = projectList[index];
+                        return Container(
+                          margin: EdgeInsets.symmetric(vertical: scale * 5),
+                          decoration: BoxDecoration(
+                            color: AppColors.fabBackground,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: ListTile(
+                            leading: Icon(
+                              Icons.dashboard_rounded,
+                              color: AppColors.lightBlack,
+                            ),
+                            title: Text(project['name'] ?? 'No Name'),
+                            subtitle: Text(
+                              project['description'] ?? 'No Description',
+                            ),
+                            trailing: IconButton(
+                              icon: Icon(Icons.more_horiz_rounded),
+                              color: AppColors.lightBlack,
+                              onPressed: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                        color: AppColors.white,
+                                        borderRadius: BorderRadius.circular(30),
+                                      ),
+                                      height: scale * 300,
+
+                                      child: Center(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              project['name'],
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w900,
+                                                color: AppColors.lightBlack,
+                                                fontSize: scale * 20,
+                                              ),
+                                            ),
+
+                                            SizedBox(height: scale * 5),
+
+                                            Text(
+                                              project['description'],
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w100,
+                                                color: AppColors.lightBlack,
+                                                fontSize: scale * 15,
+                                              ),
+                                            ),
+
+                                            SizedBox(height: scale * 30),
+
+                                            SizedBox(
+                                              width: width * 0.8,
+                                              child: TextButton.icon(
+                                                onPressed: () {},
+                                                icon: Icon(
+                                                  Icons.edit,
+                                                  color: AppColors.lightBlack,
+                                                ),
+                                                label: Text('Editar proyecto'),
+                                                style: TextButton.styleFrom(
+                                                  backgroundColor:
+                                                      AppColors.fabBackground,
+                                                  foregroundColor:
+                                                      AppColors.lightBlack,
+                                                  shape: ContinuousRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadiusGeometry.circular(
+                                                          30,
+                                                        ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+
+                                            SizedBox(height: scale * 5),
+
+                                            SizedBox(
+                                              width: width * 0.8,
+                                              child: TextButton.icon(
+                                                onPressed: () {},
+                                                icon: Icon(
+                                                  Icons.delete,
+                                                  color: AppColors.red,
+                                                ),
+                                                label: Text(
+                                                  'Eliminar proyecto',
+                                                ),
+                                                style: TextButton.styleFrom(
+                                                  backgroundColor:
+                                                      AppColors.fabBackground,
+                                                  foregroundColor:
+                                                      AppColors.red,
+                                                  shape: ContinuousRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadiusGeometry.circular(
+                                                          30,
+                                                        ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                            onTap: () {},
+                          ),
+                        );
+                      },
+                    );
+                  }
+                },
+              ),
             ],
           ),
         ),

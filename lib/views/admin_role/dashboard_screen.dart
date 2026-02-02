@@ -4,6 +4,7 @@ import 'package:bolt_frontend/config/measures/scales.dart';
 import 'package:bolt_frontend/config/theme/app_colors.dart';
 import 'package:bolt_frontend/views/admin_role/create_project.dart';
 import 'package:bolt_frontend/widgets/custom_floating_action_button.dart';
+import 'package:bolt_frontend/widgets/custom_listview_builder.dart';
 import 'package:flutter/material.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -132,6 +133,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                 ],
               ),
+
+              // Projects list view
+
+              // FutureBuilder<List<dynamic>> (
+              //   future: ,
+              //   builder: (context, snapshot) {
+              //     return CustomListviewBuilder();
+              //   }
+              // ),
             ],
           ),
         ),

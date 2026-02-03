@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:bolt_frontend/models/project.dart';
 import 'package:bolt_frontend/models/project_create.dart';
+import 'package:bolt_frontend/models/project_edit.dart';
 import 'package:bolt_frontend/services/token_service.dart';
 import 'package:http/http.dart' as http;
 
@@ -36,31 +37,32 @@ class ProjectService {
     }
   }
 
-  // static Future<void> updateProject(String projectId, Project updatedProject) async {
-  //   String endpoint = '/projects/update/$projectId';
+  static Future<bool> updateProject(ProjectEdit project) async {
+    String id = project.id;
+    String endpoint = '/projects/update/$id';
 
-  //   final token = await TokenService.getToken();
+    final token = await TokenService.getToken();
 
-  //   if(token == null){
-  //     throw Exception('No token found');
-  //   }
+    if(token == null){
+      throw Exception('No token found');
+    }
 
-  //   final response = await http.put(
-  //     Uri.parse(url + endpoint),
-  //     headers: {
-  //       'Authorization': 'Bearer $token',
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: json.encode(updatedProject.toJson()),
-  //   );
+    final response = await http.put(
+      Uri.parse(url + endpoint),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      body: json.encode(project.toJson()),
+    );
 
-  //   if(response.statusCode == 200){
-  //     print('Project updated successfully');
-  //   }else{
-  //     print(response.statusCode);
-  //     throw Exception('Failed to update project');
-  //   }
-  // }
+    if(response.statusCode == 200){
+      return true;
+    }else{
+      print(response.statusCode);
+      throw Exception('Failed to update project');
+    }
+  }
 
   static Future<bool> createProject(ProjectCreate project) async {
     final token = await TokenService.getToken();

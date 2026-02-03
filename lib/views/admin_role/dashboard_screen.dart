@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_new
+// ignore_for_file: unnecessary_new, use_build_context_synchronously
 
 import 'package:bolt_frontend/config/measures/scales.dart';
 import 'package:bolt_frontend/config/theme/app_colors.dart';
@@ -6,7 +6,6 @@ import 'package:bolt_frontend/models/project.dart';
 import 'package:bolt_frontend/services/project_service.dart';
 import 'package:bolt_frontend/views/admin_role/create_project.dart';
 import 'package:bolt_frontend/widgets/custom_floating_action_button.dart';
-import 'package:bolt_frontend/widgets/custom_listview_builder.dart';
 import 'package:flutter/material.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -17,7 +16,7 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  late Future<List<dynamic>> _projects;
+  late Future<List<Project>> _projects;
 
   @override
   void initState() {
@@ -153,7 +152,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               SizedBox(height: scale * 30),
 
               // Projects list view
-              FutureBuilder<List<dynamic>>(
+              FutureBuilder<List<Project>>(
                 future: _projects,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -185,10 +184,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               Icons.dashboard_rounded,
                               color: AppColors.lightBlack,
                             ),
-                            title: Text(project['name'] ?? 'No Name'),
-                            subtitle: Text(
-                              project['description'] ?? 'No Description',
-                            ),
+                            title: Text(project.name),
+                            subtitle: Text(project.description),
                             trailing: IconButton(
                               icon: Icon(Icons.more_horiz_rounded),
                               color: AppColors.lightBlack,
@@ -209,7 +206,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                               MainAxisAlignment.center,
                                           children: [
                                             Text(
-                                              project['name'],
+                                              project.name,
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w900,
                                                 color: AppColors.lightBlack,
@@ -220,7 +217,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             SizedBox(height: scale * 5),
 
                                             Text(
-                                              project['description'],
+                                              project.description,
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w100,
                                                 color: AppColors.lightBlack,
@@ -233,10 +230,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             SizedBox(
                                               width: width * 0.8,
                                               child: TextButton.icon(
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                  _editProject(project);
-                                                },
+                                                onPressed: () {},
                                                 icon: Icon(
                                                   Icons.edit,
                                                   color: AppColors.lightBlack,
@@ -262,38 +256,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             SizedBox(
                                               width: width * 0.8,
                                               child: TextButton.icon(
-                                                onPressed: () async{
-                                                  final confirm =  await showDialog<bool>(
-                                                    context: context, 
-                                                    builder: (context) {
-                                                      return AlertDialog(
-                                                        title: Text('Confirmar eliminación'),
-                                                        content: Text('¿Estás seguro de que deseas eliminar este proyecto? Esta acción no se puede deshacer.'),
-                                                        actions: [
-                                                          TextButton(
-                                                            onPressed: () => Navigator.of(context).pop(false),
-                                                            child: Text('Cancelar'),
-                                                          ),
-                                                          TextButton(
-                                                            onPressed: () => Navigator.of(context).pop(true),
-                                                            child: Text('Eliminar', style: TextStyle(color: AppColors.red),),
-                                                          ),
-                                                        ],
-                                                      );
-                                                    }
-                                                  );
-                                                  if(confirm == true){
-                                                    try {
-                                                      // TODO: implementar -> await ProjectService.deleteProject(project['id'].toString());
-                                                      if (mounted) {
-                                                        setState(() {
-                                                          _projects = ProjectService.getAllProjects();
-                                                        });
-                                                      }
-                                                    } catch (e) {
-                                                      print('Error deleting project: $e');
-                                                    }
-                                                  }
+                                                onPressed: () async {
+                                                  delete(project);
                                                 },
                                                 icon: Icon(
                                                   Icons.delete,
@@ -339,69 +303,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Future<void> _editProject(Map<String, dynamic> project) async {
-    final TextEditingController namecontroller = TextEditingController(
-      text: project['name'],
-    );
-    final TextEditingController descriptioncontroller = TextEditingController(
-      text: project['description'],
-    );
+  void delete(Project project) async {
+    await ProjectService.deleteProject(project);
 
-    await showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Editar Proyecto'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: namecontroller,
-                decoration: InputDecoration(labelText: 'Nombre del proyecto'),
-              ),
-              TextField(
-                controller: descriptioncontroller,
-                decoration: InputDecoration(
-                  labelText: 'Descripción del proyecto',
-                ),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Cancelar'),
-            ),
-            TextButton(
-              onPressed: () async {
-                final updatedProject = Project(
-                  id: project['id'],
-                  name: namecontroller.text,
-                  description: descriptioncontroller.text,
-                  creationDate: DateTime.parse(project['creationDate']),
-                );
+    Navigator.pop(context);
 
-                try {
-                  await ProjectService.updateProject(
-                    project['id'].toString(),
-                    updatedProject,
-                  );
-                  if (mounted) {
-                    setState(() {
-                      _projects = ProjectService.getAllProjects();
-                    });
-                  }
-                } catch (e) {
-                  print('Error updating project: $e');
-                }
-              },
-              child: Text('Guardar'),
-            ),
-          ],
-        );
-      },
-    );
+    setState(() {
+      _projects = ProjectService.getAllProjects();
+    });
+
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('Proyecto eliminado correctamente')));
   }
 }

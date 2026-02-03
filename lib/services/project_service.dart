@@ -3,19 +3,19 @@
 import 'dart:convert';
 
 import 'package:bolt_frontend/models/project.dart';
+import 'package:bolt_frontend/models/project_create.dart';
 import 'package:bolt_frontend/services/token_service.dart';
 import 'package:http/http.dart' as http;
 
 class ProjectService {
-
   static const String url = "https://bolt-backend-c99u.onrender.com";
 
-  static Future<List<dynamic>> getAllProjects() async {
+  static Future<List<Project>> getAllProjects() async {
     String endpoint = '/projects/allProjects';
 
     final token = await TokenService.getToken();
 
-    if(token == null){
+    if (token == null) {
       throw Exception('No token found');
     }
 
@@ -27,41 +27,42 @@ class ProjectService {
       },
     );
 
-    if(response.statusCode == 200){
-      return json.decode(response.body);
-    }else{
+    if (response.statusCode == 200) {
+      List data = json.decode(response.body);
+      return data.map((e) => Project.fromJson(e)).toList();
+    } else {
       print(response.statusCode);
       throw Exception('Failed to load projects');
     }
   }
 
-  static Future<void> updateProject(String projectId, Project updatedProject) async {
-    String endpoint = '/projects/update/$projectId';
+  // static Future<void> updateProject(String projectId, Project updatedProject) async {
+  //   String endpoint = '/projects/update/$projectId';
 
-    final token = await TokenService.getToken();
+  //   final token = await TokenService.getToken();
 
-    if(token == null){
-      throw Exception('No token found');
-    }
+  //   if(token == null){
+  //     throw Exception('No token found');
+  //   }
 
-    final response = await http.put(
-      Uri.parse(url + endpoint),
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-      },
-      body: json.encode(updatedProject.toJson()),
-    );
+  //   final response = await http.put(
+  //     Uri.parse(url + endpoint),
+  //     headers: {
+  //       'Authorization': 'Bearer $token',
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: json.encode(updatedProject.toJson()),
+  //   );
 
-    if(response.statusCode == 200){
-      print('Project updated successfully');
-    }else{
-      print(response.statusCode);
-      throw Exception('Failed to update project');
-    }
-  }
+  //   if(response.statusCode == 200){
+  //     print('Project updated successfully');
+  //   }else{
+  //     print(response.statusCode);
+  //     throw Exception('Failed to update project');
+  //   }
+  // }
 
-  static Future<bool> createProject(Project project) async {
+  static Future<bool> createProject(ProjectCreate project) async {
     final token = await TokenService.getToken();
 
     if (token == null) {
@@ -82,6 +83,35 @@ class ProjectService {
     } else {
       print(response.statusCode);
       throw Exception('Failed to create project');
+    }
+  }
+
+  static Future<bool> deleteProject(Project project) async {
+    String? id = project.id;
+    String endpoint = '/projects/delete/$id';
+
+    final token = await TokenService.getToken();
+
+    if (token == null) {
+      throw Exception('Token not found');
+    }
+
+    final response = await http.delete(
+      Uri.parse(url + endpoint),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 204) {
+      return true;
+    } else if (response.statusCode == 403) {
+      throw Exception('No tienes permiso para eliminar proyectos');
+    } else {
+      print(response.statusCode);
+      print(response.body);
+      throw Exception('Failed to delete project');
     }
   }
 }

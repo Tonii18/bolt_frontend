@@ -2,9 +2,8 @@
 
 import 'package:bolt_frontend/config/measures/scales.dart';
 import 'package:bolt_frontend/config/theme/app_colors.dart';
-import 'package:bolt_frontend/models/project.dart';
+import 'package:bolt_frontend/models/project_create.dart';
 import 'package:bolt_frontend/services/project_service.dart';
-import 'package:bolt_frontend/services/user_service.dart';
 import 'package:bolt_frontend/views/admin_role/list_user_project.dart';
 import 'package:bolt_frontend/widgets/custom_elevated_button.dart';
 import 'package:bolt_frontend/widgets/custom_floating_action_button.dart';
@@ -183,7 +182,7 @@ class _CreateProjectState extends State<CreateProject> {
     String description = descriptionController.text;
     DateTime creationDate = DateTime.now();
 
-    Project newProject = Project(
+    ProjectCreate newProject = ProjectCreate(
       name: name,
       description: description,
       creationDate: creationDate,

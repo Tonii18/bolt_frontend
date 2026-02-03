@@ -3,6 +3,7 @@
 import 'package:bolt_frontend/config/measures/scales.dart';
 import 'package:bolt_frontend/config/theme/app_colors.dart';
 import 'package:bolt_frontend/models/project.dart';
+import 'package:bolt_frontend/services/project_service.dart';
 import 'package:bolt_frontend/services/user_service.dart';
 import 'package:bolt_frontend/views/admin_role/list_user_project.dart';
 import 'package:bolt_frontend/widgets/custom_elevated_button.dart';
@@ -188,7 +189,7 @@ class _CreateProjectState extends State<CreateProject> {
       creationDate: creationDate,
     );
 
-    bool response = await UserService.createProject(newProject);
+    bool response = await ProjectService.createProject(newProject);
 
     if (response) {
       ScaffoldMessenger.of(

@@ -56,28 +56,4 @@ class UserService {
       throw Exception('Failed to load users');
     }
   }
-
-  static Future<bool> createProject(Project project) async {
-    final token = await TokenService.getToken();
-
-    if (token == null) {
-      throw Exception('No token found');
-    }
-
-    final response = await http.post(
-      Uri.parse('$url/projects/createdProject'),
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-      },
-      body: json.encode(project.toJson()),
-    );
-
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      return true;
-    } else {
-      print(response.statusCode);
-      throw Exception('Failed to create project');
-    }
-  }
 }

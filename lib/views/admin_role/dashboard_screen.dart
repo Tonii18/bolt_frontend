@@ -2,6 +2,7 @@
 
 import 'package:bolt_frontend/config/measures/scales.dart';
 import 'package:bolt_frontend/config/theme/app_colors.dart';
+import 'package:bolt_frontend/models/project.dart';
 import 'package:bolt_frontend/services/project_service.dart';
 import 'package:bolt_frontend/views/admin_role/create_project.dart';
 import 'package:bolt_frontend/widgets/custom_floating_action_button.dart';
@@ -232,7 +233,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             SizedBox(
                                               width: width * 0.8,
                                               child: TextButton.icon(
-                                                onPressed: () {},
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                  _editProject(project);
+                                                },
                                                 icon: Icon(
                                                   Icons.edit,
                                                   color: AppColors.lightBlack,
@@ -258,7 +262,39 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             SizedBox(
                                               width: width * 0.8,
                                               child: TextButton.icon(
-                                                onPressed: () {},
+                                                onPressed: () async{
+                                                  final confirm =  await showDialog<bool>(
+                                                    context: context, 
+                                                    builder: (context) {
+                                                      return AlertDialog(
+                                                        title: Text('Confirmar eliminación'),
+                                                        content: Text('¿Estás seguro de que deseas eliminar este proyecto? Esta acción no se puede deshacer.'),
+                                                        actions: [
+                                                          TextButton(
+                                                            onPressed: () => Navigator.of(context).pop(false),
+                                                            child: Text('Cancelar'),
+                                                          ),
+                                                          TextButton(
+                                                            onPressed: () => Navigator.of(context).pop(true),
+                                                            child: Text('Eliminar', style: TextStyle(color: AppColors.red),),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    }
+                                                  );
+                                                  if(confirm == true){
+                                                    try {
+                                                      // TODO: implementar -> await ProjectService.deleteProject(project['id'].toString());
+                                                      if (mounted) {
+                                                        setState(() {
+                                                          _projects = ProjectService.getAllProjects();
+                                                        });
+                                                      }
+                                                    } catch (e) {
+                                                      print('Error deleting project: $e');
+                                                    }
+                                                  }
+                                                },
                                                 icon: Icon(
                                                   Icons.delete,
                                                   color: AppColors.red,
@@ -300,6 +336,72 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _editProject(Map<String, dynamic> project) async {
+    final TextEditingController namecontroller = TextEditingController(
+      text: project['name'],
+    );
+    final TextEditingController descriptioncontroller = TextEditingController(
+      text: project['description'],
+    );
+
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Editar Proyecto'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: namecontroller,
+                decoration: InputDecoration(labelText: 'Nombre del proyecto'),
+              ),
+              TextField(
+                controller: descriptioncontroller,
+                decoration: InputDecoration(
+                  labelText: 'Descripción del proyecto',
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () async {
+                final updatedProject = Project(
+                  id: project['id'],
+                  name: namecontroller.text,
+                  description: descriptioncontroller.text,
+                  creationDate: DateTime.parse(project['creationDate']),
+                );
+
+                try {
+                  await ProjectService.updateProject(
+                    project['id'].toString(),
+                    updatedProject,
+                  );
+                  if (mounted) {
+                    setState(() {
+                      _projects = ProjectService.getAllProjects();
+                    });
+                  }
+                } catch (e) {
+                  print('Error updating project: $e');
+                }
+              },
+              child: Text('Guardar'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

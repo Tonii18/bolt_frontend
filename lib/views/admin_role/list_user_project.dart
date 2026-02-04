@@ -1,10 +1,15 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:bolt_frontend/config/measures/scales.dart';
 import 'package:bolt_frontend/config/theme/app_colors.dart';
+import 'package:bolt_frontend/services/project_service.dart';
 import 'package:bolt_frontend/services/user_service.dart';
 import 'package:flutter/material.dart';
 
 class ListUserProject extends StatefulWidget {
-  const ListUserProject({super.key});
+  final String projectId;
+
+  const ListUserProject({super.key, required this.projectId});
 
   @override
   State<ListUserProject> createState() => _ListUserProjectState();
@@ -99,19 +104,46 @@ class _ListUserProjectState extends State<ListUserProject> {
                       itemCount: users.length,
                       itemBuilder: (context, index) {
                         final user = users[index];
-                        if(user['role'] == 'ROLE_ADMIN'){
+                        if (user['role'] == 'ROLE_ADMIN') {
                           return SizedBox.shrink();
                         }
-                        return ListTile(
-                          title: Text(user['fullName'] ?? 'No Name'),
-                          subtitle: Text(user['email'] ?? 'No Email'),
-                          trailing: Icon(
-                            Icons.add_circle_outline,
-                            color: AppColors.blueWater,
+                        return Container(
+                          margin: EdgeInsets.symmetric(vertical: scale * 5),
+                          decoration: BoxDecoration(
+                            color: AppColors.white,
+                            borderRadius: BorderRadius.circular(15),
                           ),
-                          onTap: () {
-                            // Acción al seleccionar un usuario
-                          },
+                          child: ListTile(
+                            title: Text(user['name'] ?? 'No Name'),
+                            subtitle: Text(user['email'] ?? 'No Email'),
+                            leading: CircleAvatar(
+                              backgroundColor: AppColors.blueWater,
+                              child: Text(
+                                user['name'][0].toUpperCase(),
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            trailing: IconButton(
+                              icon: Icon(Icons.add_circle),
+                              color: AppColors.blueWater,
+                              onPressed: () {
+                                ProjectService.addUserToProject(
+                                  widget.projectId,
+                                  user['id'].toString(),
+                                );
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Usuario añadido correctamente',
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            onTap: () {
+                              
+                            },
+                          ),
                         );
                       },
                     );

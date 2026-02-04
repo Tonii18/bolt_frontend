@@ -1,10 +1,11 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, unused_local_variable
 
 import 'dart:convert';
 
 import 'package:bolt_frontend/models/project.dart';
 import 'package:bolt_frontend/models/project_create.dart';
 import 'package:bolt_frontend/models/project_edit.dart';
+import 'package:bolt_frontend/models/user_project.dart';
 import 'package:bolt_frontend/services/token_service.dart';
 import 'package:http/http.dart' as http;
 
@@ -116,4 +117,76 @@ class ProjectService {
       throw Exception('Failed to delete project');
     }
   }
+
+  // ------------ //
+  // Functions related to user assignment to projects
+  // ------------ //
+
+  // GET USERS BY PROJECT
+
+  static Future <List<UserProject>> getUsersByProject(String projectId) async {
+    String endpoint = '/projects/$projectId/users';
+    final token = await TokenService.getToken();
+
+    final response = await http.get(
+      Uri.parse(url + endpoint),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      }
+    );
+
+    if(response.statusCode == 200){
+      List data = json.decode(response.body);
+      return data.map((e) => UserProject.fromJson(e)).toList();
+    }else{
+      print(response.statusCode);
+      throw Exception('Failed to load users for this project');
+    }
+  }
+
+  // ADD USER TO PROJECT
+
+  static Future <void> addUserToProject(String projectId, String userId) async {
+    String endpoint = '/projects/$projectId/users/$userId';
+    final token = await TokenService.getToken();
+
+    final response = await http.post(
+      Uri.parse(url + endpoint),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      }
+    );
+
+    if(response.statusCode == 200){
+      print('User added succesfully');
+    }else{
+      print(response.statusCode);
+      throw Exception('Failed to add users for this project');
+    }
+  }
+
+  // DELETE USER FROM PROJECT
+
+  static Future <void> deleteUserFromProject(String projectId, String userId) async {
+    String endpoint = '/projects/$projectId/users/$userId';
+    final token = await TokenService.getToken();
+
+    final response = await http.delete(
+      Uri.parse(url + endpoint),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      }
+    );
+
+    if(response.statusCode == 204){
+      print('User deleted succesfully');
+    }else{
+      print(response.statusCode);
+      throw Exception('Failed to add users for this project');
+    }
+  }
+
 }

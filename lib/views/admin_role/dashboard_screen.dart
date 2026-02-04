@@ -7,6 +7,7 @@ import 'package:bolt_frontend/models/project_edit.dart';
 import 'package:bolt_frontend/services/project_service.dart';
 import 'package:bolt_frontend/views/admin_role/create_project.dart';
 import 'package:bolt_frontend/views/admin_role/edit_project.dart';
+import 'package:bolt_frontend/views/admin_role/project_info.dart';
 import 'package:bolt_frontend/widgets/custom_floating_action_button.dart';
 import 'package:flutter/material.dart';
 
@@ -94,9 +95,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  /// ============================
   /// UI SECTIONS
-  /// ============================
 
   Widget _buildHeader(
     Shader gradient,
@@ -199,6 +198,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
         borderRadius: BorderRadius.circular(15),
       ),
       child: ListTile(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ProjectInfo(project: project,)),
+          );
+        },
         leading: Icon(Icons.dashboard_rounded),
         title: Text(project.name),
         subtitle: Text(project.description),
@@ -209,10 +214,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
-
-  /// ============================
+ 
   /// ACTIONS
-  /// ============================
 
   void _openProjectOptions(Project project, double scale, double width) {
     showModalBottomSheet(

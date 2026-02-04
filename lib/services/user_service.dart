@@ -1,8 +1,6 @@
 import 'dart:convert';
 
-import 'package:bolt_frontend/models/project_create.dart';
 import 'package:bolt_frontend/services/token_service.dart';
-import 'package:bolt_frontend/views/admin_role/create_project.dart';
 import 'package:http/http.dart' as http;
 
 class UserService {

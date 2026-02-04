@@ -125,7 +125,7 @@ class _CreateProjectState extends State<CreateProject> {
               SizedBox(height: scale * 15),
 
               Text(
-                'Añade participantes a tu proyecto \npara que puedan colaborar. \nPuedes hacerlo ahora o más adelante',
+                'Añade participantes a tu proyecto \npara que puedan colaborar. \nPuedes hacerlo más adelante.',
                 style: TextStyle(
                   color: AppColors.lightBlack,
                   fontWeight: FontWeight.w300,
@@ -136,13 +136,13 @@ class _CreateProjectState extends State<CreateProject> {
 
               SizedBox(height: scale * 15),
 
-              CustomFloatingActionButton(
-                scale: scale,
-                width: width,
-                screen: ListUserProject(),
-                text: 'Añadir participantes',
-                icon: Icons.add,
-              ),
+              // CustomFloatingActionButton(
+              //   scale: scale,
+              //   width: width,
+              //   screen: ListUserProject(),
+              //   text: 'Añadir participantes',
+              //   icon: Icons.add,
+              // ),
 
               SizedBox(height: scale * 250),
 

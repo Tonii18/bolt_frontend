@@ -7,15 +7,16 @@ class CustomFloatingActionButton extends StatelessWidget {
     super.key,
     required this.scale,
     required this.width,
-    this.screen,
-    required this.text, required this.icon,
+    required this.screen,
+    required this.text, required this.icon, this.onReturn,
   });
 
   final double scale;
   final double width;
-  final Widget? screen;
+  final Widget screen;
   final String text;
   final IconData icon;
+  final VoidCallback? onReturn;
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +25,9 @@ class CustomFloatingActionButton extends StatelessWidget {
       onPressed: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => screen!),
+          MaterialPageRoute(builder: (context) => screen),
         );
+        if (onReturn != null) onReturn!();
       },
       icon: Icon(icon, size: scale * 30, color: AppColors.lightBlack),
 

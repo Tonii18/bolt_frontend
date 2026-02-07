@@ -189,4 +189,25 @@ class ProjectService {
     }
   }
 
+  static Future<List<Project>> getProjectsByUser(String userId) async {
+    String endpoint = '/projects/projectsByUser/$userId';
+    final token = await TokenService.getToken();
+
+    final response = await http.get(
+      Uri.parse(url + endpoint),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      }
+    );
+
+    if(response.statusCode == 200){
+      List data = json.decode(response.body);
+      return data.map((e) => Project.fromJson(e)).toList();
+    }else{
+      print(response.statusCode);
+      throw Exception('Failed to load projects for this user');
+    }
+  }
+
 }

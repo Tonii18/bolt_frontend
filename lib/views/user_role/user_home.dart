@@ -17,7 +17,7 @@ class _UserHomeState extends State<UserHome> {
 
   final List<Widget> widgetsOptions = [
     ProjectsScreen(),
-    SettingsScreen()
+    SettingsScreen(),
   ];
 
   void onNavTapped(int index) {

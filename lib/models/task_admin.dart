@@ -2,7 +2,7 @@ class TaskAdmin {
   final String id;
   final String title;
   final String description;
-  final String state;
+  String state;
 
   TaskAdmin({required this.id, required this.title, required this.description, required this.state});
 
@@ -17,7 +17,7 @@ class TaskAdmin {
 
   factory TaskAdmin.fromJson(Map<String, dynamic> json) {
     return TaskAdmin(
-      id: json['id'],
+      id: json['id'].toString(),
       title: json['title'],
       description: json['description'],
       state: json['state'],

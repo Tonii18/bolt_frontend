@@ -189,6 +189,10 @@ class _ProjectInfoState extends State<ProjectInfo> {
 
                   final tasks = snapshot.data!;
 
+                  final pendingTasks = tasks
+                      .where((task) => task.state == 'not_done')
+                      .toList();
+
                   if (tasks.isEmpty) {
                     return Text(
                       'Este proyecto no tiene tareas',
@@ -199,9 +203,9 @@ class _ProjectInfoState extends State<ProjectInfo> {
                   return ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
-                    itemCount: tasks.length,
+                    itemCount: pendingTasks.length,
                     itemBuilder: (context, index) {
-                      final task = tasks[index];
+                      final task = pendingTasks[index];
 
                       return Container(
                         padding: EdgeInsets.symmetric(
@@ -223,8 +227,8 @@ class _ProjectInfoState extends State<ProjectInfo> {
                           ),
                           title: Text(task.title),
                           trailing: IconButton(
-                            onPressed: () {}, 
-                            icon: Icon(Icons.edit),
+                            onPressed: () => _openTaskEdit(task, scale, width),
+                            icon: Icon(Icons.check),
                           ),
                         ),
                       );
@@ -235,11 +239,89 @@ class _ProjectInfoState extends State<ProjectInfo> {
 
               SizedBox(height: scale * 15),
 
-              CustomFloatingActionButton(scale: scale, width: width, screen: AddTask(), text: "Añadir tareas", icon: Icons.add_task)
+              CustomFloatingActionButton(
+                scale: scale,
+                width: width,
+                screen: AddTask(),
+                text: "Añadir tareas",
+                icon: Icons.add_task,
+              ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  /// ACTIONS
+  void _openTaskEdit(TaskAdmin task, double scale, double width) {
+    showModalBottomSheet(
+      context: context,
+      builder: (sheetContext) {
+        return Container(
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          height: scale * 300,
+          padding: EdgeInsets.all(scale * 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextField(
+                readOnly: true,
+                controller: TextEditingController(text: task.title),
+                decoration: InputDecoration(
+                  labelText: 'Título de la tarea',
+                  prefixIcon: Icon(Icons.edit),
+                ),
+              ),
+
+              SizedBox(height: 30),
+
+              TextField(
+                readOnly: true,
+                controller: TextEditingController(text: task.description),
+                decoration: InputDecoration(
+                  labelText: 'Descripción',
+                  prefixIcon: Icon(Icons.description),
+                ),
+              ),
+
+              SizedBox(height: 15),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () async {
+                        String newState = task.state == 'not_done'
+                            ? 'done'
+                            : 'not_done';
+                        
+                        await TaskService.taskStatusChange(
+                          task.id.toString(),
+                          newState,
+                        );
+
+                        setState(() {
+                          task.state = newState;
+                          _projectTasks = TaskService.getTAsksByProject(
+                            widget.project.id,
+                          );
+                        });
+
+                        Navigator.pop(context);
+                    },
+                    child: Text('Tarea Completada'),
+                    style: TextButton.styleFrom(foregroundColor: Colors.green),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
